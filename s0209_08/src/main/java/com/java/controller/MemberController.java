@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -35,9 +36,12 @@ public class MemberController {
 	}
 	
 	@PostMapping("/memberOk")
-	public String member(HttpServletRequest request, Model model) {	//오버로딩:메소드명 같고,매개변수개수,타입이 다른것, url은 겹치지 않게
-		model.addAttribute("id", request.getParameter("id"));
-		model.addAttribute("pw", request.getParameter("pw"));
+	public String member(HttpServletRequest request) {	//오버로딩:메소드명 같고,매개변수개수,타입이 다른것, url은 겹치지 않게
+		ModelAndView model = new ModelAndView();
+		model.addObject("id",request.getParameter("id"));
+		model.addObject("pw", request.getParameter("pw"));
+		//model.addAttribute("id", request.getParameter("id"));
+		//model.addAttribute("pw", request.getParameter("pw"));
 		return "member/memberOk";
 	}
 	
