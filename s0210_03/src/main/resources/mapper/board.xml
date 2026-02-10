@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" "./mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.test.board.service.BoardMapper">
+
+  <!-- <resultMap id="clobMap" class="egovframework.rte.psl.dataaccess.util.EgovMap">
+  	<result property="AA" column="AA" jdbcType="CLOB" javaType="String"/>
+  </resultMap> -->
+
+  <!-- 공통은 sql에 -->
+
+  <!-- 임시로 페이징 사용중 이 페이징 부분은 그냥 쿼리에 넣거나 다른 방법으로 -->
+  <sql id="paging">
+	  OFFSET (#{page} - 1) ROWS FETCH NEXT #{perPage} ROWS ONLY
+  </sql>
+
+  <!-- total과 함께 사용할 조건(따로 total을 조회할 경우 조건 한곳에서 수정하기 편하도록) -->
+  <sql id="condition">
+  	<if test='search != null and !search.equals("")'>
+        <choose>
+            <when test='searchType == "0"'>
+                and title like concat(#{search},'%')
+            </when>
+            <when test='searchType == "1"'>
+                and content like concat(#{search},'%')
+            </when>
+        </choose>
+    </if>
+  </sql>
+
+
+  <select id="selectAll" resultType="BoardDto" parameterType="BoardDto">
+  	select
+  		A.bno
+  		,A.btitle
+  		,DBMS_LOB.SUBSTR(A.content, 4000, 1) as bcontent	<!-- 임시로 CLOB타입 String변환 4000바이트가 넘는 경우 절삭될 수 있음 -->
+  		,A.user_id
+  		,A.bgroup
+  		,A.bstep
+  		,A.bindent
+  		,A.bhit
+  		,A.bfile
+  		,A.bdate
+  		,count(*) over() as total_cnt
+  	from board A
+  	where 1=1
+  	<include refid="condition" />
+    <include refid="paging" />
+  </select>
+
+  <select id="totalCnt" resultType="int" parameterType="BoardDto">
+  	select
+  		count(*) as total_cnt
+  	from board A
+  	where 1=1
+  	<include refid="condition" />
+  </select>
+
+
+</mapper>
