@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" "../mybatis-3-mapper.dtd" >
+<mapper namespace="com.java.dao.MemberDao">
+
+  <!-- total과 함께 사용할 조건(따로 total을 조회할 경우 조건 한곳에서 수정하기 편하도록) -->
+  <sql id="condition">
+  	<if test='id != null and !id.equals("")'>
+		and id = #{id}
+    </if>
+    <if test='pw != null and !pw.equals("")'>
+    	and pw = #{pw}
+    </if>
+  </sql>
+
+	<!-- com.java.dto.MemberDto alias설정으로 변경 -->
+  <select id="selectAll" resultType="MemberDto" parameterType="MemberDto">
+  	select
+  		A.id
+  		,A.pw
+  		,A.name
+  		,A.email
+  		,A.phone
+  		,A.gender
+  		,A.hobby
+  		,count(*) over() as total_cnt
+  	from member A
+  	where 1=1
+  	<include refid="condition" />
+  </select>
+
+  <select id="totalCnt" resultType="int" parameterType="MemberDto">
+  	select
+  		count(*) as total_cnt
+  	from member A
+  	where 1=1
+  	<include refid="condition" />
+  </select>
+
+
+</mapper>
