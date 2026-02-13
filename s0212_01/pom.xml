@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.java</groupId>
-	<artifactId>s0211_04</artifactId>
+	<artifactId>s0212_01</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>s0211_04</name>
+	<name>s0212_01</name>
 	<description>스프링프로젝트</description>
 	<url/>
 	<licenses>
@@ -67,6 +67,11 @@
 			<version>4.0.1</version>
 			<scope>test</scope>
 		</dependency>
+		<!--<dependency>
+			<groupId>com.mysql</groupId>
+			<artifactId>mysql-connector-j</artifactId>
+			<scope>runtime</scope>
+		</dependency>-->
 		<!--로그추가-->
 		<dependency>
 		    <groupId>org.bgee.log4jdbc-log4j2</groupId>
