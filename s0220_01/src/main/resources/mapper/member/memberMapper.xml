@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "//mybatis.org/DTD Mapper 3.0//EN" "../mybatis-3-mapper.dtd" >
+<mapper namespace="com.java.mapper.MemberMapper">
+
+  <!-- total과 함께 사용할 조건(따로 total을 조회할 경우 조건 한곳에서 수정하기 편하도록) -->
+  <sql id="condition">
+  	<!-- <if test='member.id != null and !member.id.equals("")'>
+		and A.id = #{member.id}
+    </if>
+    <if test='member.pw != null and !member.pw.equals("")'>
+    	and A.pw = #{member.pw}
+    </if> -->
+    <if test='id != null and !id.equals("")'>
+		and A.id = #{id}
+    </if>
+    <if test='pw != null and !pw.equals("")'>
+    	and A.pw = #{pw}
+    </if>
+    <if test='name != null and !name.equals("")'>
+    	and A.name = #{name}
+    </if>
+  </sql>
+
+  <select id="selectAll" resultType="member" parameterType="member">
+  	select
+  		A.id
+  		,A.pw
+  		,A.name
+  		,A.email
+  		,A.phone
+  		,A.gender
+  		,A.hobby
+  		,count(*) over() as total_cnt
+  	from member A
+  	where 1=1
+  	<include refid="condition" />
+  </select>
+  
+  <select id="selectOne" resultType="member" parameterType="member">
+  	select
+  		A.id
+  		,A.pw
+  		,A.name
+  		,A.email
+  		,A.phone
+  		,A.gender
+  		,A.hobby
+  		<!-- 객체에 못 담음 클라이언트에서 포맷하기 리스트일 경우 서버에서 처리하면 오래걸림(아니면 응답용 객체 만들어 줘야함) -->
+  		,regexp_substr(a.phone, '[^-]+', 1, 1) as phone1
+	    ,regexp_substr(a.phone, '[^-]+', 1, 2) as phone2
+	    ,regexp_substr(a.phone, '[^-]+', 1, 3) as phone3
+	    ,regexp_substr(a.email, '[^@]+', 1, 1) as email_id
+	    ,regexp_substr(a.email, '[^@]+', 1, 2) as email_domain
+  	from member A
+  	where 1=1
+  	<if test='id != null and !id.equals("")'>
+		and A.id = #{id}
+    </if>
+  </select>
+  
+  <select id="selectLogin" resultType="member" parameterType="member">
+  	select
+  		A.id
+  		,A.pw
+  		,A.name
+  		,A.email
+  		,A.phone
+  		,A.gender
+  		,A.hobby
+  	from member A
+  	where 1=1
+  	<include refid="condition" />
+  </select>
+
+  <select id="totalCnt" resultType="int" parameterType="member">
+  	select
+  		count(*) as total_cnt
+  	from member A
+  	where 1=1
+  	<include refid="condition" />
+  </select>
+
+  <insert id="insertMember" parameterType="member">
+  	<!-- 시퀸스 사용안할 경우 마지막번호 조회후 리턴할때 사용 -->
+  	<!-- <selectkey keyProperty="id" resultType="java.lang.String" order="BEFORE">
+  		<![CDATA[
+        SELECT 'SAMPLE-' || LPAD(NVL(MAX(TO_NUMBER(SUBSTR(id, 8))), 0) + 1, 5, '0') AS id
+        FROM SAMPLE
+        ]]>
+  	</selectkey> -->
+  	insert into member(id, pw, name, phone, email, gender, hobby) values(#{id},#{pw},#{name},#{phone},#{email},#{gender},#{hobby})
+  </insert>
+  
+  <update id="updateMember" parameterType="member">
+  	update member
+  	<set>
+  		<if test='pw != null'>
+  			pw = #{pw},
+  		</if>
+  		<if test='phone != null'>
+  			phone = #{phone},
+  		</if>
+  		<if test='email != null'>
+  			email = #{email},
+  		</if>
+  		<if test='gender != null'>
+  			gender = #{gender},
+  		</if>
+  		<if test='hobby != null'>
+  			hobby = #{hobby},
+  		</if>
+  	</set>
+  	where id = #{id}
+  </update>
+</mapper>

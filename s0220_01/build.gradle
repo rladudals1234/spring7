@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '4.0.2'
+	id 'org.springframework.boot' version '4.0.3'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -43,8 +43,8 @@ dependencies {
 	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl' //스프링부트 3.0 이상
 	// log4jdbc-log4j2
     implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
-    // Slf4j 구현체 (Logback 예시)
-    //implementation 'ch.qos.logback:logback-classic:1.5.25'
+    //파일첨부
+    implementation("commons-io:commons-io:2.20.0")
 }
 
 tasks.named('test') {
