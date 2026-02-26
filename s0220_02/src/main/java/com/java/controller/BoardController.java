@@ -93,9 +93,9 @@ public class BoardController {
 				e.printStackTrace();
 			}
 		}
-		//String id = (String) session.getAttribute("session_id");
-		//if(id == null) return "redirect:/member/login";
-		//bdto.setId(id);
+		String id = (String) session.getAttribute("session_id");
+		if(id == null) return "redirect:/member/login";
+		bdto.setId(id);
 		boardService.insertBoard(bdto);
 		return "redirect:/board/blist?flag=1";
 	}
